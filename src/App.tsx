@@ -16,7 +16,7 @@ import {
   MousePointerClick
 } from 'lucide-react';
 import { StackerGame, StackerGameHandle, GameStatus } from './components/StackerGame';
-import { AdBanner } from './components/AdBanner';
+import { DEFAULT_USER_AD_CODE } from './components/AdBanner';
 import { SettingsModal } from './components/SettingsModal';
 import { GAME_THEMES, GameTheme } from './utils/themes';
 import { GameDifficulty, DIFFICULTY_SETTINGS } from './utils/difficulty';
@@ -44,7 +44,7 @@ export default function App() {
   // Preferences & customization
   const [theme, setTheme] = useState<GameTheme>(GAME_THEMES[0]);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [customAdCode, setCustomAdCode] = useState<string>('');
+  const [customAdCode, setCustomAdCode] = useState<string>(DEFAULT_USER_AD_CODE);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
@@ -80,7 +80,11 @@ export default function App() {
       }
 
       const savedAdCode = localStorage.getItem('stacker_ad_code');
-      if (savedAdCode) setCustomAdCode(savedAdCode);
+      if (savedAdCode && savedAdCode.trim().length > 0) {
+        setCustomAdCode(savedAdCode);
+      } else {
+        setCustomAdCode(DEFAULT_USER_AD_CODE);
+      }
     } catch {
       // Local storage might be blocked in some iframe contexts
     }
@@ -205,11 +209,11 @@ export default function App() {
 
   // Share score
   const handleShare = async () => {
-    const text = `🏆 J'ai fait un score de ${score} sur Stacker 3D (${DIFFICULTY_SETTINGS[difficulty].nameFr}) ! Peux-tu me battre ?`;
+    const text = `🏆 J'ai fait un score de ${score} sur TACK (${DIFFICULTY_SETTINGS[difficulty].nameFr}) ! Peux-tu me battre ?`;
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
-          title: 'Stacker 3D',
+          title: 'TACK',
           text,
           url: window.location.href,
         });
@@ -254,8 +258,13 @@ export default function App() {
 
       {/* Top HUD Controls (Safe area aligned) */}
       <header className="relative z-20 flex items-center justify-between p-3.5 pt-[max(0.75rem,env(safe-area-inset-top))] pointer-events-none">
-        {/* Record & Mode Badges */}
+        {/* TACK Brand & Record & Mode Badges */}
         <div className="flex items-center gap-1.5 pointer-events-auto">
+          {/* Game Title Badge */}
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/10 backdrop-blur-md border border-black/5 shadow-xs">
+            <span className="font-['Outfit',sans-serif] font-black text-sm tracking-wider text-current">TACK</span>
+          </div>
+
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/10 backdrop-blur-md border border-black/5 shadow-xs">
             <Trophy className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
             <span className="text-xs font-bold tracking-wider">RECORD : {highScore}</span>
@@ -366,6 +375,16 @@ export default function App() {
       {/* State Overlay: Ready State */}
       {gameStatus === 'ready' && (
         <div className="relative z-20 flex flex-col items-center mb-6 pointer-events-none animate-in fade-in zoom-in-95 duration-300 px-4 w-full max-w-sm self-center">
+          {/* Main Game Title: TACK */}
+          <div className="flex flex-col items-center mb-3">
+            <h1 className="font-['Outfit',sans-serif] font-black text-6xl sm:text-7xl tracking-wider text-center drop-shadow-sm select-none">
+              TACK
+            </h1>
+            <p className="text-[11px] font-bold uppercase tracking-widest opacity-60 text-center -mt-1">
+              Tour 3D d&apos;Empilement
+            </p>
+          </div>
+
           {/* Segmented Mode Alternator */}
           <div className="pointer-events-auto w-full mb-2.5 bg-black/10 backdrop-blur-md p-1 rounded-2xl border border-black/10 flex items-center gap-1 shadow-sm">
             {(['easy', 'normal', 'hard'] as GameDifficulty[]).map((mode) => {
@@ -482,21 +501,10 @@ export default function App() {
 
           {/* Actions */}
           <div className="flex flex-col gap-2">
-            {!hasUsedRevive && score >= 2 && (
-              <button
-                type="button"
-                onClick={handleReviveGame}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 active:scale-98 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-transform"
-              >
-                <Zap className="w-4 h-4 fill-current" />
-                <span>Continuer la tour (+1 Chance Pub)</span>
-              </button>
-            )}
-
             <button
               type="button"
               onClick={() => gameRef.current?.restart()}
-              className="w-full py-3 px-4 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 active:scale-98 shadow-md transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 active:scale-98 shadow-md transition-all"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Rejouer Immédiatement</span>
@@ -505,7 +513,7 @@ export default function App() {
             <button
               type="button"
               onClick={handleShare}
-              className="w-full py-2 px-4 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/10 active:scale-98 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full py-2.5 px-4 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/10 active:scale-98 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
             >
               {copiedLink ? (
                 <>
@@ -544,15 +552,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Responsive Mobile / Web Advertisement Banner */}
-      <footer className="relative z-20 w-full pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-        <AdBanner
-          customAdCode={customAdCode}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          onWatchRewardedAd={handleReviveGame}
-          canRevive={gameStatus === 'ended' && !hasUsedRevive && score >= 2}
-        />
-      </footer>
+      {/* Safe Area Bottom Spacing (Clean, ad-free interface) */}
+      <div className="relative z-20 w-full pb-[max(0.75rem,env(safe-area-inset-bottom))]" />
 
       {/* Settings & Custom Ad Code Modal */}
       <SettingsModal

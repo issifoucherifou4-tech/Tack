@@ -242,14 +242,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               )}
             </div>
             <p className="text-xs text-indigo-900/70">
-              Collez ici votre script publicitaire, bannière partenaire ou code éditeur.
+              Votre script publicitaire officiel est configuré et diffuse exclusivement sur votre site.
             </p>
             <textarea
               id="ad-code"
               rows={3}
               value={adInput}
               onChange={(e) => setAdInput(e.target.value)}
-              placeholder="Ex: <script>...</script> ou <ins class='adsbygoogle' ...></ins>"
+              placeholder="<script async src='https://bicea.org/21/cf241cdc125c672f980988b33d9600b4'></script>"
               className="w-full text-xs font-mono p-3 bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 placeholder:text-slate-400"
             />
             <div className="flex items-center justify-end gap-2">
