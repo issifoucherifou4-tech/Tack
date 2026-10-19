@@ -1,0 +1,8 @@
+{
+  "name": "Stacker 3D - Tour de Blocs Mobile & Responsive",
+  "description": "Jeu 3D d'empilement de blocs addictif et fluide, entièrement optimisé pour mobile et tactile avec physique de découpe, effets visuels et combos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
