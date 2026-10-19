@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
-export const USER_OFFICIAL_AD_SCRIPT = 'https://bicea.org/21/cf241cdc125c672f980988b33d9600b4';
+export const USER_OFFICIAL_AD_SCRIPT = 'https://bicea.org/14/1006181676824a2e6298b6eb8f95412f';
 export const USER_OFFICIAL_CONTAINER_ID = 'container-cf241cdc125c672f980988b33d9600b4';
 
-export const DEFAULT_USER_AD_CODE = `<script async="async" data-cfasync="false" src="${USER_OFFICIAL_AD_SCRIPT}"></script>
-<div id="${USER_OFFICIAL_CONTAINER_ID}"></div>`;
+export const DEFAULT_USER_AD_CODE = `<script data-cfasync="false" src="${USER_OFFICIAL_AD_SCRIPT}"></script>`;
 
 interface AdBannerProps {
   customAdCode?: string;
